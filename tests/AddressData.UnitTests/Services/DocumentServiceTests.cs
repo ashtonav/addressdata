@@ -260,7 +260,7 @@ public class DocumentServiceTests
             Assert.That(newLines[3], Does.Contain("NewData3"));
         }
     }
-    
+
     [Test]
     public async Task GetAsyncReturnsZeroSizeWhenCsvHasOnlyHeader()
     {
