@@ -5,7 +5,7 @@ using Models.Domain;
 
 public interface IDocumentService
 {
-    Task<AddressDocumentDomainModel> InsertAsync(IEnumerable writeModel, LocationDomainModel location);
-    Task<AddressDocumentDomainModel?> GetAsync(LocationDomainModel location);
-    Task<IEnumerable<AddressDocumentDomainModel>> GetAllAsync();
+    public Task<AddressDocumentDomainModel> InsertAsync(IEnumerable writeModel, LocationDomainModel location);
+    public Task<AddressDocumentDomainModel?> GetAsync(LocationDomainModel location);
+    public Task<IEnumerable<AddressDocumentDomainModel>> GetAllAsync();
 }

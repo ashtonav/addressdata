@@ -22,13 +22,13 @@ public class ErrorModelApiResponseTests
 
         // Act
         var errorModel = new ErrorModelApiResponse(comparedException);
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
 
             // Assert
             Assert.That(errorModel.Type, Is.EqualTo(comparedException.GetType().Name));
             Assert.That(errorModel.Message, Is.EqualTo(comparedException.Message));
             Assert.That(errorModel.StackTrace, Is.EqualTo(comparedException.ToString()));
-        });
+        }
     }
 }
