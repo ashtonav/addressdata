@@ -4,6 +4,6 @@ using Models.Domain;
 
 public interface ISeedingService
 {
-    Task<IEnumerable<AddressDocumentDomainModel>> RunSeeding(long? limit);
-    Task<AddressDocumentDomainModel> AddCity(long areaId);
+    public Task<IEnumerable<AddressDocumentDomainModel>> RunSeeding(long? limit);
+    public Task<AddressDocumentDomainModel> AddCity(long areaId);
 }

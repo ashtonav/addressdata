@@ -4,8 +4,8 @@ using Models.Domain;
 
 public interface IOverpassTurboService
 {
-    Task<IEnumerable<CityInfoDomainModel>?> GetCities();
-    Task<CityInfoDomainModel?> GetCity(long areaId);
-    Task<LocationDomainModel?> GetLocation(long areaId);
-    Task<IEnumerable<AddressesDomainModel>?> GetAddresses(long areaId);
+    public Task<IEnumerable<CityInfoDomainModel>?> GetCities();
+    public Task<CityInfoDomainModel?> GetCity(long areaId);
+    public Task<LocationDomainModel?> GetLocation(long areaId);
+    public Task<IEnumerable<AddressesDomainModel>?> GetAddresses(long areaId);
 }

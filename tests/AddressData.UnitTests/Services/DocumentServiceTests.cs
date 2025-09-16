@@ -285,7 +285,7 @@ public class DocumentServiceTests
 
         // Assert
         Assert.That(doc, Is.Not.Null);
-        Assert.That(doc!.Size, Is.EqualTo(0));
+        Assert.That(doc!.Size, Is.Zero);
     }
 
     [Test]
