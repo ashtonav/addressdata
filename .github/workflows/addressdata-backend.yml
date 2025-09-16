@@ -2,7 +2,7 @@ name: Build and deploy .NET application to container app addressdata-backend
 on:
   push:
     branches:
-    - feat/cicd
+    - main
 env:
   CONTAINER_APP_CONTAINER_NAME: addressdatabackend
   CONTAINER_APP_NAME: addressdata-backend
