@@ -8,7 +8,7 @@
 
 AddressData is a tool that collects addresses from real cities around the world, along with their latitude and longitude coordinates.
 
-After addresses are collected, they are used to power [AddressData.net](https://AddressData.net), a site that displays all known addresses by city, alongside an interactive map.
+After addresses are collected, they are used by [github.com/ashtonav/addressdata-frontend](https://github.com/ashtonav/addressdata-frontend) to power [AddressData.net](https://AddressData.net), a site that displays all known addresses by city, alongside an interactive map.
 
 Currently, [AddressData.net](https://AddressData.net) contains millions of addresses for over 1,500 cities around the world.
 
