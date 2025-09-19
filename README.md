@@ -8,7 +8,7 @@
 
 AddressData is a tool that collects addresses from real cities around the world, along with their latitude and longitude coordinates.
 
-After addresses are collected, they are used by [github.com/ashtonav/addressdata-frontend](https://github.com/ashtonav/addressdata-frontend) to power [AddressData.net](https://AddressData.net), a site that displays all known addresses by city, alongside an interactive map.
+After addresses are collected, they are used by [github.com/ashtonav/addressdata.net](https://github.com/ashtonav/addressdata.net) to power [AddressData.net](https://AddressData.net), a site that displays all known addresses by city, alongside an interactive map.
 
 Currently, [AddressData.net](https://AddressData.net) contains millions of addresses for over 1,500 cities around the world.
 
@@ -58,9 +58,6 @@ Currently, [AddressData.net](https://AddressData.net) contains millions of addre
 
 - **Overpass Turbo API**:  
   Addresses are retrieved from [Overpass Turbo](https://overpass-turbo.eu/)—a web-based data mining tool for OpenStreetMap. It provides a powerful query language for extracting location-based data (like street addresses) from the OpenStreetMap database.
-
-- **Datasette**:  
-  [Datasette](https://docs.datasette.io/en/stable/) is used to display CSV data on a website. It offers a lightweight, flexible way to query and visualize structured data, making it easier to explore and share the address information we collect.
 
 ## Contributing
 
