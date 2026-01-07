@@ -1,4 +1,5 @@
 namespace AddressData.UnitTests.Services;
+
 using AddressData.Core.Models.Domain;
 using AddressData.Core.Services;
 using NUnit.Framework;

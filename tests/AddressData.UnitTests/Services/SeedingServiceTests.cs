@@ -1,4 +1,5 @@
 namespace AddressData.UnitTests.Services;
+
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using AddressData.Core.Models.Domain;

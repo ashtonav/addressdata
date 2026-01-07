@@ -1,4 +1,5 @@
 namespace AddressData.UnitTests.Services;
+
 using AddressData.Core.Services;
 using AddressData.UnitTests.Helpers;
 using Microsoft.Extensions.Logging;

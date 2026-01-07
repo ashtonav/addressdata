@@ -499,5 +499,6 @@ dotnet_naming_rule.parameters_rule.severity             = warning
 
 # Custom config for addressdata project
 [*.cs]
-# Disable (ignore) CA1848 entirely
+# TODO: Disabled warnings about logging. Feel free to re-enable them if you believe these warnings are valid.
 dotnet_diagnostic.CA1848.severity = none
+dotnet_diagnostic.CA1873.severity = none
