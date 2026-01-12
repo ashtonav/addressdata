@@ -1,4 +1,5 @@
 namespace AddressData.Core.Services;
+
 using Interfaces;
 using Mappers;
 using Microsoft.Extensions.Logging;

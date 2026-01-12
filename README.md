@@ -29,18 +29,17 @@ Currently, [AddressData.net](https://AddressData.net) contains millions of addre
 ### Using Visual Studio
 
 #### Requirements
-- Visual Studio 2022
+- Visual Studio 2026
     - With ASP.NET and web development installed from the Visual Studio Installer
-- .NET 8 SDK
-- Any Operating System
+- .NET 10 SDK
 
 #### How to Run
-1. Open the solution in Visual Studio 2022.
+1. Open the solution in Visual Studio 2026.
 2. Build and launch the AddressData.WebApi project.
 3. The API can be accessed at [https://localhost:5280](https://localhost:5280).
 
 #### How to Test
-1. Open the solution in Visual Studio 2022.
+1. Open the solution in Visual Studio 2026.
 2. Run the tests in Test Explorer.
 
 ## Usage
@@ -50,9 +49,9 @@ Currently, [AddressData.net](https://AddressData.net) contains millions of addre
     - Navigate to [https://localhost:5280](https://localhost:5280). 
     - Make a `POST` request to the `/documents/seed` endpoint.
 3. **Monitor Output**:
-    - After a while, you’ll see a newly created folder structure (in your solution’s output directory) containing country and city CSV files with addresses.
+    - After a while, you'll see a newly created folder structure (in your solution's output directory) containing country and city CSV files with addresses.
     - Note that the *full* seeding process can take up to **1 day** to complete, depending on how many records you are collecting.
-    - If you’re in a hurry, you can provide a **limit** parameter in your POST request to `/documents/seed` to only generate a smaller subset of data.
+    - If you're in a hurry, you can provide a **limit** parameter in your POST request to `/documents/seed` to only generate a smaller subset of data.
 
 ## Acknowledgments
 

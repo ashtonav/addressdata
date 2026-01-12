@@ -4,7 +4,7 @@ using System.Net;
 using Core.Services;
 using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Polly;
