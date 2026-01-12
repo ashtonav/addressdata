@@ -49,9 +49,9 @@ Currently, [AddressData.net](https://AddressData.net) contains millions of addre
     - Navigate to [https://localhost:5280](https://localhost:5280). 
     - Make a `POST` request to the `/documents/seed` endpoint.
 3. **Monitor Output**:
-    - After a while, you’ll see a newly created folder structure (in your solution’s output directory) containing country and city CSV files with addresses.
+    - After a while, you'll see a newly created folder structure (in your solution's output directory) containing country and city CSV files with addresses.
     - Note that the *full* seeding process can take up to **1 day** to complete, depending on how many records you are collecting.
-    - If you’re in a hurry, you can provide a **limit** parameter in your POST request to `/documents/seed` to only generate a smaller subset of data.
+    - If you're in a hurry, you can provide a **limit** parameter in your POST request to `/documents/seed` to only generate a smaller subset of data.
 
 ## Acknowledgments
 
