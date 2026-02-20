@@ -29,9 +29,9 @@ Currently, [AddressData.net](https://AddressData.net) contains millions of addre
 ### Using Visual Studio
 
 #### Requirements
-- Visual Studio 2026
-    - With ASP.NET and web development installed from the Visual Studio Installer
-- .NET 10 SDK
+- Visual Studio 2026.
+    - With ASP.NET and web development installed from the Visual Studio Installer.
+- .NET 10 SDK.
 
 #### How to Run
 1. Open the solution in Visual Studio 2026.
@@ -64,4 +64,4 @@ Pull requests are accepted.
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](https://choosealicense.com/licenses/mit/).
