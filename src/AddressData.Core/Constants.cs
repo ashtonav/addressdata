@@ -3,7 +3,10 @@ namespace AddressData.Core;
 public static class Constants
 {
     // Overpass Turbo Queries
-    public const string OverpassTurboUrl = "https://maps.mail.ru/osm/tools/overpass/api/interpreter";
+    /// <summary>
+    /// Retrieved from https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
+    /// </summary>
+    public const string OverpassTurboUrl = "https://overpass-api.de/api/interpreter";
     public const string OverpassTurboGetAllCitiesQuery =
         "?data=[out:csv(::id,\"name\",\"name:en\";true;\",\")];area[place=\"city\"];out;";
     public static string OverpassTurboGetCityQuery(long areaId) =>

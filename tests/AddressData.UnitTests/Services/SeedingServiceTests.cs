@@ -254,7 +254,7 @@ public class SeedingServiceTests
 
         // Assert
         Assert.That(result, Is.Not.Null);
-        Assert.That(result!.Size, Is.EqualTo(999));
+        Assert.That(result.Size, Is.EqualTo(999));
 
         _overpassTurboServiceMock.VerifyAll();
         _documentServiceMock.VerifyAll();
@@ -469,7 +469,7 @@ public class SeedingServiceTests
 
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(first!.Size, Is.EqualTo(second!.Size));
+            Assert.That(first.Size, Is.EqualTo(second.Size));
             Assert.That(first.City, Is.EqualTo(second.City));
         }
 
