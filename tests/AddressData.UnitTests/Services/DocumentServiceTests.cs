@@ -380,7 +380,7 @@ public class DocumentServiceTests
         var doc = await _documentService.InsertAsync(arrayWriteModel, location);
 
         Assert.That(doc, Is.Not.Null);
-        Assert.That(doc!.Size, Is.EqualTo(2));
+        Assert.That(doc.Size, Is.EqualTo(2));
 
         var fileName = Path.Combine("output", location.Country, location.State, $"{location.City}.csv");
         var lines = await File.ReadAllLinesAsync(fileName);
