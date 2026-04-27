@@ -8,10 +8,9 @@
     <RootNamespace>AddressData.Core</RootNamespace>
   </PropertyGroup>
 
-
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="33.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.7" />
   </ItemGroup>
 
 </Project>
