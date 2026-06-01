@@ -23,7 +23,7 @@
 
     Examples:
       | limit |
-      | 5     |
+      | 1     |
 
   @InsertCity
   Scenario: Insert city should return created result

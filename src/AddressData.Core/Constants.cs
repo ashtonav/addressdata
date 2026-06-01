@@ -7,16 +7,21 @@ public static class Constants
     /// Retrieved from https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
     /// </summary>
     public const string OverpassTurboUrl = "https://overpass-api.de/api/interpreter";
+
+    /// <summary>
+    /// User Agent is expected as per https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
+    /// </summary>
+    public const string OverpassTurboUserAgent = "AddressData/1.0";
     public const string OverpassTurboGetAllCitiesQuery =
-        "?data=[out:csv(::id,\"name\",\"name:en\";true;\",\")];area[place=\"city\"];out;";
+        "[out:csv(::id,\"name\",\"name:en\";true;\",\")];area[place=\"city\"];out;";
     public static string OverpassTurboGetCityQuery(long areaId) =>
-        $"?data=[out:csv(::id,\"name\",\"name:en\";true;\",\")];area({areaId});out;";
+        $"[out:csv(::id,\"name\",\"name:en\";true;\",\")];area({areaId});out;";
     public static string OverpassTurboGetLatitudeLongitudeQuery(long areaId) =>
-        $"?data=[out:csv(::lat, ::lon;true;\",\")];area({areaId})->.a;node(area.a);out 1;";
+        $"[out:csv(::lat, ::lon;true;\",\")];area({areaId})->.a;node(area.a);out 1;";
     public static string OverpassTurboGetAddressesQuery(long areaId) =>
-        $"?data=[out:csv(::lat, ::lon, \"addr:housenumber\", \"addr:street\", \"addr:postcode\";true;\",\")];area({areaId});nwr(area)[\"addr:housenumber\"][\"addr:street\"][\"addr:postcode\"];out center;";
+        $"[out:csv(::lat, ::lon, \"addr:housenumber\", \"addr:street\", \"addr:postcode\";true;\",\")];area({areaId});nwr(area)[\"addr:housenumber\"][\"addr:street\"][\"addr:postcode\"];out center;";
     public static string OverpassTurboAreaInfoQuery(string latitude, string longitude) =>
-        $"?data=[out:json];is_in({latitude},{longitude})->.a;area.a[name][boundary=administrative][admin_level=2];out tags;area.a[name][boundary=administrative][admin_level=4];out tags;";
+        $"[out:json];is_in({latitude},{longitude})->.a;area.a[name][boundary=administrative][admin_level=2];out tags;area.a[name][boundary=administrative][admin_level=4];out tags;";
 
     // Overpass Turbo Response
     public const string OverpassTurboResponseElements = "elements";
@@ -33,6 +38,6 @@ public static class Constants
     public const string ErrorControllerRoute = "error";
 
     // Other settings
-    public const int MinimumNumberOfAddresses = 50;
+    public const int MinimumNumberOfAddresses = 10;
     public const int SeedingDelayMs = 1000;
 }

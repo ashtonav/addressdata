@@ -72,7 +72,8 @@ public class OverpassTurboService
         {
             var response = await httpClientFactory
                 .CreateClient()
-                .GetAsync($"{Constants.OverpassTurboUrl}{query}");
+                .PostAsync(Constants.OverpassTurboUrl,
+                    new FormUrlEncodedContent([new("data", query)]));
 
             await using var stream = await response.Content.ReadAsStreamAsync();
             using var streamReader = new StreamReader(stream);
@@ -94,7 +95,8 @@ public class OverpassTurboService
         {
             var response = await httpClientFactory
                 .CreateClient()
-                .GetAsync($"{Constants.OverpassTurboUrl}{query}");
+                .PostAsync(Constants.OverpassTurboUrl,
+                    new FormUrlEncodedContent([new("data", query)]));
 
             await using var stream = await response.Content.ReadAsStreamAsync();
             using var streamReader = new StreamReader(stream);
@@ -117,7 +119,8 @@ public class OverpassTurboService
     {
         var httpResponse = await httpClientFactory
             .CreateClient()
-            .GetAsync($"{Constants.OverpassTurboUrl}{Constants.OverpassTurboAreaInfoQuery(location.Latitude, location.Longitude)}");
+            .PostAsync(Constants.OverpassTurboUrl,
+                new FormUrlEncodedContent([new("data", Constants.OverpassTurboAreaInfoQuery(location.Latitude, location.Longitude))]));
 
         using var jsonDocument = JsonDocument.Parse(await httpResponse.Content.ReadAsStringAsync());
 

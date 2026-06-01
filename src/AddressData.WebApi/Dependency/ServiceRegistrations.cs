@@ -1,9 +1,10 @@
 namespace AddressData.WebApi.Dependency;
 
 using System.Net;
+using Core;
 using Core.Services;
 using Core.Services.Interfaces;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.OpenApi;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -21,6 +22,10 @@ public static class ServiceRegistrations
             {
                 clientBuilder.SetHandlerLifetime(TimeSpan.FromMinutes(5)); //Set lifetime to five minutes
                 clientBuilder.AddPolicyHandler(GetRetryPolicy());
+                clientBuilder.ConfigureHttpClient(client =>
+                {
+                    client.DefaultRequestHeaders.Add("User-Agent", Constants.OverpassTurboUserAgent);
+                });
             });
 
         // Configure DI
@@ -65,14 +70,11 @@ public static class ServiceRegistrations
 
     public static WebApplicationBuilder AddLargeApiTimeout(this WebApplicationBuilder builder)
     {
-        var largeTimeout = TimeSpan.FromDays(10);
-
-        builder.Services.Configure<KestrelServerOptions>(options =>
+        builder.Services.AddRequestTimeouts(options =>
         {
-            options.Limits.KeepAliveTimeout = largeTimeout;
-            options.Limits.RequestHeadersTimeout = largeTimeout;
+            options.DefaultPolicy =
+                new RequestTimeoutPolicy { Timeout = TimeSpan.FromDays(10) };
         });
-
         return builder;
     }
 
@@ -82,6 +84,7 @@ public static class ServiceRegistrations
         HttpPolicyExtensions
             .HandleTransientHttpError()
             .OrResult(msg => msg.StatusCode == HttpStatusCode.NotFound)
+            .OrResult(msg => msg.StatusCode == HttpStatusCode.TooManyRequests)
             .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2,
                 retryAttempt)));
 }
