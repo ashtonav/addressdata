@@ -1,6 +1,7 @@
 namespace AddressData.WebApi.Dependency;
 
 using System.Net;
+using Core;
 using Core.Services;
 using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -21,6 +22,10 @@ public static class ServiceRegistrations
             {
                 clientBuilder.SetHandlerLifetime(TimeSpan.FromMinutes(5)); //Set lifetime to five minutes
                 clientBuilder.AddPolicyHandler(GetRetryPolicy());
+                clientBuilder.ConfigureHttpClient(client =>
+                {
+                    client.DefaultRequestHeaders.Add("User-Agent", Constants.OverpassTurboUserAgent);
+                });
             });
 
         // Configure DI
@@ -82,6 +87,7 @@ public static class ServiceRegistrations
         HttpPolicyExtensions
             .HandleTransientHttpError()
             .OrResult(msg => msg.StatusCode == HttpStatusCode.NotFound)
+            .OrResult(msg => msg.StatusCode == HttpStatusCode.TooManyRequests)
             .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2,
                 retryAttempt)));
 }

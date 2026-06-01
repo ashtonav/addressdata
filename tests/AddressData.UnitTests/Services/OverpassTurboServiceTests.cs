@@ -1,5 +1,6 @@
 namespace AddressData.UnitTests.Services;
 
+using AddressData.Core;
 using AddressData.Core.Services;
 using AddressData.UnitTests.Helpers;
 using Microsoft.Extensions.Logging;
@@ -232,5 +233,106 @@ public class OverpassTurboServiceTests
         var locationResult = await service.GetLocation(0);
 
         Assert.That(locationResult, Is.Null);
+    }
+
+    [Test]
+    public async Task GetCitiesSendsPostRequest()
+    {
+        var csvContent = "@id,name,name:en\r\n10,TestCity,\r\n";
+        var (httpClient, handler) = HttpClientHelper.CreateHttpClientWithHandler(csvContent, "text/csv");
+        _httpClientFactoryMock
+            .Setup(f => f.CreateClient(It.IsAny<string>()))
+            .Returns(httpClient);
+
+        var service = new OverpassTurboService(_httpClientFactoryMock.Object, _loggerMock.Object);
+        var _ = await service.GetCities();
+
+        Assert.That(handler.LastRequest, Is.Not.Null);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(handler.LastRequest!.Method, Is.EqualTo(HttpMethod.Post));
+            Assert.That(handler.LastRequest!.RequestUri, Is.EqualTo(new Uri(Constants.OverpassTurboUrl)));
+        }
+
+        var body = await handler.LastRequest!.Content!.ReadAsStringAsync();
+        Assert.That(body, Is.EqualTo("data=" + Uri.EscapeDataString(Constants.OverpassTurboGetAllCitiesQuery).Replace("%20", "+")));
+    }
+
+    [Test]
+    public async Task GetCitySendsPostRequestWithCorrectQuery()
+    {
+        var csvContent = "@id,name,name:en\r\n123,TestCity,\r\n";
+        var (httpClient, handler) = HttpClientHelper.CreateHttpClientWithHandler(csvContent, "text/csv");
+        _httpClientFactoryMock
+            .Setup(f => f.CreateClient(It.IsAny<string>()))
+            .Returns(httpClient);
+
+        var service = new OverpassTurboService(_httpClientFactoryMock.Object, _loggerMock.Object);
+        var _ = await service.GetCity(123);
+
+        var body = await handler.LastRequest!.Content!.ReadAsStringAsync();
+        Assert.That(body, Is.EqualTo("data=" + Uri.EscapeDataString(Constants.OverpassTurboGetCityQuery(123)).Replace("%20", "+")));
+    }
+
+    [Test]
+    public async Task GetAddressesSendsPostRequest()
+    {
+        var csvContent = "@lat,@lon,addr:housenumber,addr:street,addr:postcode\r\n";
+        var (httpClient, handler) = HttpClientHelper.CreateHttpClientWithHandler(csvContent, "text/csv");
+        _httpClientFactoryMock
+            .Setup(f => f.CreateClient(It.IsAny<string>()))
+            .Returns(httpClient);
+
+        var service = new OverpassTurboService(_httpClientFactoryMock.Object, _loggerMock.Object);
+        var _ = await service.GetAddresses(456);
+
+        Assert.That(handler.LastRequest!.Method, Is.EqualTo(HttpMethod.Post));
+
+        var body = await handler.LastRequest!.Content!.ReadAsStringAsync();
+        Assert.That(body, Is.EqualTo("data=" + Uri.EscapeDataString(Constants.OverpassTurboGetAddressesQuery(456)).Replace("%20", "+")));
+    }
+
+    [Test]
+    public async Task GetLocationUsesPostForAllRequests()
+    {
+        var responses = new Queue<HttpResponseMessage>();
+
+        // 1) lat/long CSV
+        var latLongCsv = "@lat,@lon\r\n12.3456,-98.7654\r\n";
+        responses.Enqueue(HttpClientHelper.CreateHttpResponse(latLongCsv, "text/csv"));
+
+        // 2) JSON state/country
+        var json = /*lang=json,strict*/ @"{
+                ""elements"": [
+                    {
+                        ""tags"": {
+                            ""admin_level"": ""4"",
+                            ""name:en"": ""TestState""
+                        }
+                    },
+                    {
+                        ""tags"": {
+                            ""admin_level"": ""2"",
+                            ""name:en"": ""TestCountry""
+                        }
+                    }
+                ]
+            }";
+        responses.Enqueue(HttpClientHelper.CreateHttpResponse(json, "application/json"));
+
+        // 3) city CSV
+        var cityCsv = "@id,name,name:en\r\n789,TestCity,\r\n";
+        responses.Enqueue(HttpClientHelper.CreateHttpResponse(cityCsv, "text/csv"));
+
+        var (httpClient, handler) = HttpClientHelper.CreateHttpClientWithHandler(responses);
+        _httpClientFactoryMock
+            .Setup(f => f.CreateClient(It.IsAny<string>()))
+            .Returns(httpClient);
+
+        var service = new OverpassTurboService(_httpClientFactoryMock.Object, _loggerMock.Object);
+        var _ = await service.GetLocation(789);
+
+        Assert.That(handler.LastRequest, Is.Not.Null);
+        Assert.That(handler.LastRequest!.Method, Is.EqualTo(HttpMethod.Post));
     }
 }
