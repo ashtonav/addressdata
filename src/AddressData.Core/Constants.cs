@@ -38,6 +38,6 @@ public static class Constants
     public const string ErrorControllerRoute = "error";
 
     // Other settings
-    public const int MinimumNumberOfAddresses = 50;
+    public const int MinimumNumberOfAddresses = 10;
     public const int SeedingDelayMs = 1000;
 }
