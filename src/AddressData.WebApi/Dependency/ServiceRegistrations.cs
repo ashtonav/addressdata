@@ -4,7 +4,7 @@ using System.Net;
 using Core;
 using Core.Services;
 using Core.Services.Interfaces;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.OpenApi;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -70,14 +70,11 @@ public static class ServiceRegistrations
 
     public static WebApplicationBuilder AddLargeApiTimeout(this WebApplicationBuilder builder)
     {
-        var largeTimeout = TimeSpan.FromDays(10);
-
-        builder.Services.Configure<KestrelServerOptions>(options =>
+        builder.Services.AddRequestTimeouts(options =>
         {
-            options.Limits.KeepAliveTimeout = largeTimeout;
-            options.Limits.RequestHeadersTimeout = largeTimeout;
+            options.DefaultPolicy =
+                new RequestTimeoutPolicy { Timeout = TimeSpan.FromDays(10) };
         });
-
         return builder;
     }
 
