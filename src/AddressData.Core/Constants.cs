@@ -6,7 +6,7 @@ public static class Constants
     /// <summary>
     /// Retrieved from https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
     /// </summary>
-    public const string OverpassTurboUrl = "https://overpass-api.de/api/interpreter";
+    public const string OverpassTurboUrl = "https://maps.mail.ru/osm/tools/overpass/api/interpreter";
 
     /// <summary>
     /// User Agent is expected as per https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
