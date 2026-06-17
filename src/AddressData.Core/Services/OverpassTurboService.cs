@@ -66,52 +66,46 @@ public class OverpassTurboService
         return DomainToDomainMapper.Map(city, stateCountry);
     }
 
+    private async Task<Stream> PostAndGetStream(string query)
+    {
+        var response = await httpClientFactory
+            .CreateClient()
+            .PostAsync(Constants.OverpassTurboUrl,
+                new FormUrlEncodedContent([new("data", query)]));
+        return await response.Content.ReadAsStreamAsync();
+    }
+
     private async Task<IList<T>?> FetchDataCollection<T>(string query)
     {
         try
         {
-            var response = await httpClientFactory
-                .CreateClient()
-                .PostAsync(Constants.OverpassTurboUrl,
-                    new FormUrlEncodedContent([new("data", query)]));
-
-            await using var stream = await response.Content.ReadAsStreamAsync();
+            await using var stream = await PostAndGetStream(query);
             using var streamReader = new StreamReader(stream);
             using var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
-
             return [.. csvReader.GetRecords<T>()];
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "An error occured while fetching data from Overpass Turbo");
+            return null;
         }
-
-        return null;
     }
 
     private async Task<T?> FetchDataSingle<T>(string query)
     {
         try
         {
-            var response = await httpClientFactory
-                .CreateClient()
-                .PostAsync(Constants.OverpassTurboUrl,
-                    new FormUrlEncodedContent([new("data", query)]));
-
-            await using var stream = await response.Content.ReadAsStreamAsync();
+            await using var stream = await PostAndGetStream(query);
             using var streamReader = new StreamReader(stream);
             using var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
             await csvReader.ReadAsync();
-
-            return csvReader
-                .GetRecord<T>();
+            return csvReader.GetRecord<T>();
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "An error occured while fetching data from Overpass Turbo");
+            return default;
         }
-
-        return default; //null
     }
 
 
@@ -122,56 +116,35 @@ public class OverpassTurboService
             .PostAsync(Constants.OverpassTurboUrl,
                 new FormUrlEncodedContent([new("data", Constants.OverpassTurboAreaInfoQuery(location.Latitude, location.Longitude))]));
 
-        using var jsonDocument = JsonDocument.Parse(await httpResponse.Content.ReadAsStringAsync());
-
-        return ParseJson(jsonDocument);
-    }
-
-    private static StateCountryDomainModel? ParseJson(JsonDocument jsonDocument)
-    {
-        string countryName = null;
-        string stateName = null;
-
-        // TODO: HACK: Manually parsing JSON here. There must be a better way...
-        var elements = jsonDocument.RootElement.GetProperty(Constants.OverpassTurboResponseElements);
-
-        foreach (var element in elements.EnumerateArray())
+        var json = await httpResponse.Content.ReadAsStringAsync();
+        var response = JsonSerializer.Deserialize<OverpassTurboAreaInfoResponse>(json);
+        if (response?.Elements is null)
         {
-            if (element.TryGetProperty(Constants.OverpassTurboResponseTags, out var tags))
+            return null;
+        }
+
+        string? countryName = null;
+        string? stateName = null;
+
+        foreach (var element in response.Elements)
+        {
+            if (element.Tags is null)
             {
-                if (tags.TryGetProperty(Constants.OverpassTurboResponseAdministrativeLevel, out var adminLevel))
-                {
-                    if (adminLevel.GetString() == Constants.OverpassTurboResponseStateAdministrationLevel)
-                    {
-                        if (tags.TryGetProperty(Constants.OverpassTurboResponseEnglishName, out var stateEnglish))
-                        {
-                            stateName = stateEnglish.GetString();
-                        }
-                        else if (tags.TryGetProperty(Constants.OverpassTurboResponseName, out var state))
-                        {
-                            stateName = state.GetString();
-                        }
-                    }
-                    else if (adminLevel.GetString() == Constants.OverpassTurboResponseCountryAdministrationLevel)
-                    {
-                        if (tags.TryGetProperty(Constants.OverpassTurboResponseEnglishName, out var countryEnglish))
-                        {
-                            countryName = countryEnglish.GetString();
-                        }
-                        else if (tags.TryGetProperty(Constants.OverpassTurboResponseName, out var country))
-                        {
-                            countryName = country.GetString();
-                        }
-                    }
-                }
+                continue;
+            }
+
+            if (element.Tags.AdminLevel == "4")
+            {
+                stateName = element.Tags.NameEnglish ?? element.Tags.Name;
+            }
+            else if (element.Tags.AdminLevel == "2")
+            {
+                countryName = element.Tags.NameEnglish ?? element.Tags.Name;
             }
         }
 
-        if (countryName is not null && stateName is not null)
-        {
-            return new StateCountryDomainModel { Country = countryName, State = stateName };
-        }
-
-        return null;
+        return countryName is not null && stateName is not null
+            ? new StateCountryDomainModel { Country = countryName, State = stateName }
+            : null;
     }
 }

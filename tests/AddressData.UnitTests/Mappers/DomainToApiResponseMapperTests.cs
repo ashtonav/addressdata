@@ -1,7 +1,5 @@
 namespace AddressData.UnitTests.Mappers;
 
-using System;
-using System.Collections.Generic;
 using AddressData.Core.Mappers;
 using AddressData.Core.Models.Domain;
 using NUnit.Framework;
@@ -10,7 +8,7 @@ using NUnit.Framework;
 public class DomainToApiResponseMapperTests
 {
     [Test]
-    public void MapMongoDocumentDomainModelReturnsNullWhenDomainModelIsNull()
+    public void MapAddressDocumentDomainModelReturnsNullWhenDomainModelIsNull()
     {
         AddressDocumentDomainModel domainModel = null!;
         var result = DomainToApiResponseMapper.Map(domainModel);
@@ -18,7 +16,7 @@ public class DomainToApiResponseMapperTests
     }
 
     [Test]
-    public void MapMongoDocumentDomainModelReturnsExpectedResponseWhenDomainModelIsValid()
+    public void MapAddressDocumentDomainModelReturnsExpectedResponseWhenDomainModelIsValid()
     {
         var domainModel = new AddressDocumentDomainModel
         {
@@ -43,14 +41,14 @@ public class DomainToApiResponseMapperTests
     }
 
     [Test]
-    public void MapMongoDocumentsDomainModelReturnsEmptyListWhenDomainModelListIsEmpty()
+    public void MapAddressDocumentsDomainModelReturnsEmptyListWhenDomainModelListIsEmpty()
     {
         var result = DomainToApiResponseMapper.Map([]);
         Assert.That(result.Documents, Is.Empty);
     }
 
     [Test]
-    public void MapMongoDocumentsDomainModelReturnsMappedDocumentsWhenMultipleValidItems()
+    public void MapAddressDocumentsDomainModelReturnsMappedDocumentsWhenMultipleValidItems()
     {
         var domainModels = new List<AddressDocumentDomainModel>
         {
@@ -92,7 +90,7 @@ public class DomainToApiResponseMapperTests
     }
 
     [Test]
-    public void MapMongoDocumentsDomainModelIgnoresNullItems()
+    public void MapAddressDocumentsDomainModelIgnoresNullItems()
     {
         var domainModels = new List<AddressDocumentDomainModel?>
         {
@@ -126,9 +124,10 @@ public class DomainToApiResponseMapperTests
     }
 
     [Test]
-    public void MapMongoDocumentsDomainModelThrowsExceptionWhenDomainModelListIsNull()
+    public void MapAddressDocumentsDomainModelReturnsEmptyWhenDomainModelListIsNull()
     {
         IEnumerable<AddressDocumentDomainModel> domainModels = null!;
-        Assert.Throws<NullReferenceException>(() => DomainToApiResponseMapper.Map(domainModels));
+        var result = DomainToApiResponseMapper.Map(domainModels);
+        Assert.That(result.Documents, Is.Empty);
     }
 }

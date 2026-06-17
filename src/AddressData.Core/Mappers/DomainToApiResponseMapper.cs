@@ -22,8 +22,13 @@ public static class DomainToApiResponseMapper
         };
     }
 
-    public static AddressDocumentsApiResponse Map(IEnumerable<AddressDocumentDomainModel?> domainModelList)
+    public static AddressDocumentsApiResponse Map(IEnumerable<AddressDocumentDomainModel?>? domainModelList)
     {
+        if (domainModelList is null)
+        {
+            return new AddressDocumentsApiResponse { Documents = [] };
+        }
+
         var response = new AddressDocumentsApiResponse { Documents = [] };
 
         foreach (var domainModel in domainModelList)

@@ -2,9 +2,6 @@ namespace AddressData.Core.Models.Data;
 
 using CsvHelper.Configuration.Attributes;
 
-/// <summary>
-/// This model is used to write CSV files.
-/// </summary>
 public record CsvAddressesWriteModel
 {
     [Name("House number")] public required string HouseNumber { get; init; }

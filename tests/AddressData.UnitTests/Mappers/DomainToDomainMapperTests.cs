@@ -1,6 +1,5 @@
 namespace AddressData.UnitTests.Mappers;
 
-using System;
 using AddressData.Core.Mappers;
 using AddressData.Core.Models.Domain;
 using NUnit.Framework;

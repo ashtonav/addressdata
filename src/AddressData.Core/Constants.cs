@@ -2,16 +2,7 @@ namespace AddressData.Core;
 
 public static class Constants
 {
-    // Overpass Turbo Queries
-    /// <summary>
-    /// Retrieved from https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
-    /// </summary>
     public const string OverpassTurboUrl = "https://maps.mail.ru/osm/tools/overpass/api/interpreter";
-
-    /// <summary>
-    /// User Agent is expected as per https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
-    /// </summary>
-    public const string OverpassTurboUserAgent = "AddressData/1.0";
     public const string OverpassTurboGetAllCitiesQuery =
         "[out:csv(::id,\"name\",\"name:en\";true;\",\")];area[place=\"city\"];out;";
     public static string OverpassTurboGetCityQuery(long areaId) =>
@@ -23,21 +14,6 @@ public static class Constants
     public static string OverpassTurboAreaInfoQuery(string latitude, string longitude) =>
         $"[out:json];is_in({latitude},{longitude})->.a;area.a[name][boundary=administrative][admin_level=2];out tags;area.a[name][boundary=administrative][admin_level=4];out tags;";
 
-    // Overpass Turbo Response
-    public const string OverpassTurboResponseElements = "elements";
-    public const string OverpassTurboResponseEnglishName = "name:en";
-    public const string OverpassTurboResponseName = "name";
-    public const string OverpassTurboResponseTags = "tags";
-    public const string OverpassTurboResponseAdministrativeLevel = "admin_level";
-
-    // https://wiki.openstreetmap.org/wiki/Tag:boundary%3Dadministrative#:~:text=to%20that%20talk).-,Table%C2%A0%3A%20Admin_level%20for%20all%20countries,-(Edit%20this
-    public const string OverpassTurboResponseCountryAdministrationLevel = "2";
-    public const string OverpassTurboResponseStateAdministrationLevel = "4";
-
-    // Controllers
     public const string ErrorControllerRoute = "error";
-
-    // Other settings
     public const int MinimumNumberOfAddresses = 10;
-    public const int SeedingDelayMs = 1000;
 }

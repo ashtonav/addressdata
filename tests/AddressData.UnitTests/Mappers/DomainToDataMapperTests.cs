@@ -1,8 +1,5 @@
 namespace AddressData.UnitTests.Mappers;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using AddressData.Core.Mappers;
 using AddressData.Core.Models.Domain;
 using NUnit.Framework;
@@ -11,10 +8,11 @@ using NUnit.Framework;
 public class DomainToDataMapperTests
 {
     [Test]
-    public void MapSingleAddressesDomainModelThrowsNullReferenceExceptionWhenNull()
+    public void MapSingleAddressesDomainModelReturnsNullWhenNull()
     {
         AddressesDomainModel domainModel = null!;
-        Assert.Throws<NullReferenceException>(() => DomainToDataMapper.Map(domainModel));
+        var result = DomainToDataMapper.Map(domainModel);
+        Assert.That(result, Is.Null);
     }
 
     [Test]

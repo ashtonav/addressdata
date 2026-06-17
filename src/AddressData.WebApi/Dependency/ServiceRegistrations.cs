@@ -1,7 +1,6 @@
 namespace AddressData.WebApi.Dependency;
 
 using System.Net;
-using Core;
 using Core.Services;
 using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Http.Timeouts;
@@ -15,28 +14,20 @@ public static class ServiceRegistrations
 {
     public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
     {
-        // Add polly retry
         builder.Services
             .AddHttpClient()
             .ConfigureHttpClientDefaults(clientBuilder =>
             {
-                clientBuilder.SetHandlerLifetime(TimeSpan.FromMinutes(5)); //Set lifetime to five minutes
+                clientBuilder.SetHandlerLifetime(TimeSpan.FromMinutes(5));
                 clientBuilder.AddPolicyHandler(GetRetryPolicy());
-                clientBuilder.ConfigureHttpClient(client =>
-                {
-                    client.DefaultRequestHeaders.Add("User-Agent", Constants.OverpassTurboUserAgent);
-                });
             });
 
-        // Configure DI
         builder.Services.AddScoped<IOverpassTurboService, OverpassTurboService>();
         builder.Services.AddScoped<ISeedingService, SeedingService>();
         builder.Services.AddScoped<IDocumentService, DocumentService>();
 
-        // Configure lowercase URLs
         builder.Services.Configure<RouteOptions>(options => { options.LowercaseUrls = true; });
 
-        // Add controllers and swagger
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
@@ -47,17 +38,14 @@ public static class ServiceRegistrations
         return builder;
     }
 
-    // Enhance logs by adding OpenTelemetry traces.
-    // https://learn.microsoft.com/en-us/dotnet/core/diagnostics/observability-with-otel#5-configure-opentelemetry-with-the-correct-providers
+    // OpenTelemetry
     public static WebApplicationBuilder AddOpenTelemetryLogs(this WebApplicationBuilder builder)
     {
         var otel = builder.Services.AddOpenTelemetry();
 
-        // Configure OpenTelemetry Resources with the application name
         otel.ConfigureResource(resource => resource
             .AddService(builder.Environment.ApplicationName));
 
-        // Add Tracing for ASP.NET Core and export to Console
         otel.WithTracing(tracing =>
         {
             tracing.AddAspNetCoreInstrumentation();
