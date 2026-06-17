@@ -245,7 +245,7 @@ public class OverpassTurboServiceTests
             .Returns(httpClient);
 
         var service = new OverpassTurboService(_httpClientFactoryMock.Object, _loggerMock.Object);
-        var _ = await service.GetCities();
+        _ = await service.GetCities();
 
         Assert.That(handler.LastRequest, Is.Not.Null);
         using (Assert.EnterMultipleScope())

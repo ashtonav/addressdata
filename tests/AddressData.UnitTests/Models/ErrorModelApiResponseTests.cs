@@ -1,6 +1,5 @@
 namespace AddressData.UnitTests.Models;
 
-using System;
 using AddressData.Core.Models.ApiResponse;
 using NUnit.Framework;
 

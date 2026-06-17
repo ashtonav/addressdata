@@ -40,44 +40,34 @@ public class DocumentService : IDocumentService
             State = location.State,
             Country = location.Country,
             AreaId = location.AreaId,
-            Size = result.Length - 1 // The first line is the header
+            Size = result.Length - 1
         };
     }
 
     public async Task<IEnumerable<AddressDocumentDomainModel>> GetAllAsync()
     {
-        var results = new List<AddressDocumentDomainModel>();
-
         if (!Directory.Exists("output"))
         {
-            return results;
+            return [];
         }
-        var countryDirectories = Directory.GetDirectories("output");
 
-        foreach (var countryDir in countryDirectories)
+        var results = new List<AddressDocumentDomainModel>();
+
+        foreach (var csvFile in Directory.EnumerateFiles("output", "*.csv", SearchOption.AllDirectories))
         {
-            var country = Path.GetFileName(countryDir);
-            var stateDirectories = Directory.GetDirectories(countryDir);
+            var dirParts = Path.GetDirectoryName(csvFile)!.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            var country = dirParts[^2];
+            var state = dirParts[^1];
+            var city = Path.GetFileNameWithoutExtension(csvFile);
+            var lines = await File.ReadAllLinesAsync(csvFile);
 
-            foreach (var stateDir in stateDirectories)
+            results.Add(new AddressDocumentDomainModel
             {
-                var state = Path.GetFileName(stateDir);
-                var csvFiles = Directory.GetFiles(stateDir, "*.csv", SearchOption.TopDirectoryOnly);
-
-                foreach (var csvFile in csvFiles)
-                {
-                    var city = Path.GetFileNameWithoutExtension(csvFile);
-                    var lines = await File.ReadAllLinesAsync(csvFile);
-
-                    results.Add(new AddressDocumentDomainModel
-                    {
-                        City = city,
-                        State = state,
-                        Country = country,
-                        Size = lines.Length - 1
-                    });
-                }
-            }
+                City = city,
+                State = state,
+                Country = country,
+                Size = lines.Length - 1
+            });
         }
 
         return results;

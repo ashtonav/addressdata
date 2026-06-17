@@ -54,11 +54,7 @@ public class DocumentsController(ISeedingService seedingService,
             return NotFound("Document not found");
         }
 
-        var mapped = DomainToApiResponseMapper.Map(document);
-
-        return mapped is null
-            ? NotFound($"Document with area id {areaId} not found")
-            : Ok(mapped);
+        return Ok(DomainToApiResponseMapper.Map(document));
     }
 
     [HttpGet]

@@ -33,14 +33,12 @@ public class SeedingService(
 
     private async Task ValidateRequest(long areaId)
     {
-        // Validate that areaId number provided is valid
-        if (areaId is < 0 or 0)
+        if (areaId <= 0)
         {
             throw new ValidationException(
                 $"Please provide a valid AreaId. It must be a positive number. AreaId provided: {areaId}.");
         }
 
-        // Validate that city for areaId exists
         var city = await overpassTurboService.GetCity(areaId);
 
         if (city?.City == null)
@@ -61,8 +59,6 @@ public class SeedingService(
         {
             try
             {
-                await Task.Delay(Constants.SeedingDelayMs); // Adding delay so not to overwhelm their APIs
-
                 if (result.Count >= limit)
                 {
                     break;

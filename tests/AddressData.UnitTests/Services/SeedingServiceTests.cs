@@ -519,10 +519,6 @@ public class SeedingServiceTests
         _overpassTurboServiceMock.VerifyAll();
     }
 
-    /// <summary>
-    /// Helper that sets up the mocks for a successful AddCity scenario for the given areaId and cityName.
-    /// The returned AddressDocumentDomainModel will have .City set to 'returnCityDoc'.
-    /// </summary>
     private void SetupMockForAddCitySuccess(long areaId, string cityName, string returnCityDoc)
     {
         // 1) GetCity => non-null city => cityName
@@ -565,10 +561,6 @@ public class SeedingServiceTests
             .ReturnsAsync(doc);
     }
 
-    /// <summary>
-    /// Helper that sets up mocks so that AddCity will fail for the given areaId, cityName by throwing a ValidationException.
-    /// We'll specifically fail at the addresses step: returning fewer than MINIMUM_NUMBER_OF_ADDRESSES.
-    /// </summary>
     private void SetupMockForAddCityFailure(long areaId, string cityName)
     {
         // City => valid

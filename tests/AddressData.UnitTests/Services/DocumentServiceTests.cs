@@ -393,10 +393,6 @@ public class DocumentServiceTests
         }
     }
 
-    /// <summary>
-    /// A trivial record used to demonstrate writing CSV rows.
-    /// The first row will be the CSV header containing the property name "SomeField".
-    /// </summary>
     private sealed record TestCsvRecord
     {
         public string SomeField { get; init; }

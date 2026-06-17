@@ -67,7 +67,6 @@ public class OverpassTurboResponseToDomainMapperTests
     [Test]
     public void MapOverpassTurboLatitudeLongitudeResponseTreatsWhitespaceAsEmpty()
     {
-        // White space is neither null nor empty, so the mapper will accept it.
         var response = new OverpassTurboLatitudeLongitudeResponse
         {
             Latitude = " ",
@@ -77,10 +76,6 @@ public class OverpassTurboResponseToDomainMapperTests
         var result = OverpassTurboResponseToDomainMapper.Map(response);
         Assert.That(result, Is.Null);
     }
-
-
-
-
 
     [Test]
     public void MapOverpassTurboCityInfoResponseReturnsCityInfoDomainModelWhenValid()
@@ -297,8 +292,6 @@ public class OverpassTurboResponseToDomainMapperTests
     public void MapOverpassTurboAddressesResponseReturnsNullWhenResponseIsNull()
     {
         OverpassTurboAddressesResponse response = null!;
-        // The mapper code checks first if response is null => returns null.
-        // So this should not throw an exception but return null.
         var result = OverpassTurboResponseToDomainMapper.Map(response);
         Assert.That(result, Is.Null);
     }
