@@ -56,7 +56,7 @@ Currently, [AddressData.net](https://AddressData.net) contains millions of addre
 ## Acknowledgments
 
 - **Overpass Turbo API**:  
-  Addresses are retrieved from [Overpass Turbo](https://overpass-turbo.eu/)—a web-based data mining tool for OpenStreetMap. It provides a powerful query language for extracting location-based data (like street addresses) from the OpenStreetMap database.
+  Addresses are retrieved from [Overpass Turbo](https://overpass-turbo.eu/)-a web-based data mining tool for OpenStreetMap. It provides a powerful query language for extracting location-based data (like street addresses) from the OpenStreetMap database.
 
 ## Contributing
 

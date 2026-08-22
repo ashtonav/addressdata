@@ -27,8 +27,7 @@ public class SeedingService(
 
         var location = await overpassTurboService.GetLocation(areaId) ?? throw new ValidationException($"The city description in {areaId} is invalid.");
 
-        var result = await documentService.InsertAsync(writeModel, location);
-        return result;
+        return await documentService.InsertAsync(writeModel, location);
     }
 
     private async Task ValidateRequest(long areaId)
@@ -43,7 +42,7 @@ public class SeedingService(
 
         if (city?.City == null)
         {
-            throw new ValidationException($"{city?.City} not found in Overpass Turbo. Please try another city");
+            throw new ValidationException($"City with AreaId {areaId} not found in Overpass Turbo. Please try another city.");
         }
     }
 

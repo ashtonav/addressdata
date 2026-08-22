@@ -169,11 +169,11 @@ public class OverpassTurboResponseToDomainMapperTests
     [Test]
     public void MapCityInfoResponsesReturnsNullWhenCollectionIsNull()
     {
-        IList<OverpassTurboCityInfoResponse> cityInfos = null!;
+        IList<OverpassTurboCityInfoResponse>? cityInfos = null;
 
-        Assert.Throws<NullReferenceException>(() =>
-            OverpassTurboResponseToDomainMapper.Map(cityInfos)
-        );
+        var result = OverpassTurboResponseToDomainMapper.Map(cityInfos);
+
+        Assert.That(result, Is.Null);
     }
 
     [Test]

@@ -29,13 +29,10 @@ public class Program
             options.RoutePrefix = string.Empty;
         });
 
-        app.UseHttpsRedirection()
-            .UseRouting()
-            .UseExceptionHandler($"/{Constants.ErrorControllerRoute}")
-            .UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+        app.UseHttpsRedirection();
+        app.UseRouting();
+        app.UseExceptionHandler($"/{Constants.ErrorControllerRoute}");
+        app.MapControllers();
 
         await app.RunAsync();
     }

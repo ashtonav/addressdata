@@ -156,7 +156,7 @@ public class OverpassTurboServiceTests
                 LogLevel.Error,
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((v, t) =>
-                    v.ToString()!.Contains("An error occured while fetching data from Overpass Turbo")),
+                    v.ToString()!.Contains("An error occurred while fetching data from Overpass Turbo")),
                 It.IsAny<Exception>(),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
             Times.Once

@@ -29,18 +29,12 @@ public static class DomainToApiResponseMapper
             return new AddressDocumentsApiResponse { Documents = [] };
         }
 
-        var response = new AddressDocumentsApiResponse { Documents = [] };
-
-        foreach (var domainModel in domainModelList)
+        return new AddressDocumentsApiResponse
         {
-            var mapped = Map(domainModel);
-            if (mapped != null)
-            {
-                response.Documents.Add(mapped);
-            }
-        }
-
-        return response;
+            Documents = domainModelList
+                .Select(Map)
+                .Where(mapped => mapped is not null)
+        };
     }
 
 }

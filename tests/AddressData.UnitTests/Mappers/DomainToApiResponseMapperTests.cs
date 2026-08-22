@@ -71,21 +71,22 @@ public class DomainToApiResponseMapperTests
         };
 
         var result = DomainToApiResponseMapper.Map(domainModels);
+        var documents = result.Documents.ToList();
+        Assert.That(documents, Has.Count.EqualTo(2));
 
-        Assert.That(result.Documents, Has.Count.EqualTo(2));
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.Documents[0].AreaId, Is.EqualTo(1));
-            Assert.That(result.Documents[0].City, Is.EqualTo("City1"));
-            Assert.That(result.Documents[0].State, Is.EqualTo("State1"));
-            Assert.That(result.Documents[0].Country, Is.EqualTo("Country1"));
-            Assert.That(result.Documents[0].Size, Is.EqualTo(11));
+            Assert.That(documents[0].AreaId, Is.EqualTo(1));
+            Assert.That(documents[0].City, Is.EqualTo("City1"));
+            Assert.That(documents[0].State, Is.EqualTo("State1"));
+            Assert.That(documents[0].Country, Is.EqualTo("Country1"));
+            Assert.That(documents[0].Size, Is.EqualTo(11));
 
-            Assert.That(result.Documents[1].AreaId, Is.EqualTo(2));
-            Assert.That(result.Documents[1].City, Is.EqualTo("City2"));
-            Assert.That(result.Documents[1].State, Is.EqualTo("State2"));
-            Assert.That(result.Documents[1].Country, Is.EqualTo("Country2"));
-            Assert.That(result.Documents[1].Size, Is.EqualTo(22));
+            Assert.That(documents[1].AreaId, Is.EqualTo(2));
+            Assert.That(documents[1].City, Is.EqualTo("City2"));
+            Assert.That(documents[1].State, Is.EqualTo("State2"));
+            Assert.That(documents[1].Country, Is.EqualTo("Country2"));
+            Assert.That(documents[1].Size, Is.EqualTo(22));
         }
     }
 
@@ -114,12 +115,12 @@ public class DomainToApiResponseMapperTests
         };
 
         var result = DomainToApiResponseMapper.Map(domainModels);
-
-        Assert.That(result.Documents, Has.Count.EqualTo(2));
+        var documents = result.Documents.ToList();
+        Assert.That(documents, Has.Count.EqualTo(2));
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.Documents[0].AreaId, Is.EqualTo(1));
-            Assert.That(result.Documents[1].AreaId, Is.EqualTo(3));
+            Assert.That(documents[0].AreaId, Is.EqualTo(1));
+            Assert.That(documents[1].AreaId, Is.EqualTo(3));
         }
     }
 
