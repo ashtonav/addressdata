@@ -44,11 +44,11 @@ public class DomainToDataMapperTests
     }
 
     [Test]
-    public void MapEnumerableOfAddressesDomainModelReturnsEmptyWhenNull()
+    public void MapEnumerableOfAddressesDomainModelReturnsNullWhenNull()
     {
         IEnumerable<AddressesDomainModel>? domainModels = null;
         var result = DomainToDataMapper.Map(domainModels);
-        Assert.That(result.ToList(), Is.Empty);
+        Assert.That(result, Is.Null);
     }
 
     [Test]
