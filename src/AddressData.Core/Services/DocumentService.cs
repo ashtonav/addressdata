@@ -49,30 +49,29 @@ public class DocumentService : IDocumentService
             return [];
         }
 
-        var results = new List<AddressDocumentDomainModel>();
-
-        foreach (var csvFile in Directory.EnumerateFiles("output", "*.csv", SearchOption.AllDirectories))
-        {
-            var dirParts = Path.GetDirectoryName(csvFile)!.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-            var country = dirParts[^2];
-            var state = dirParts[^1];
-            var city = Path.GetFileNameWithoutExtension(csvFile);
-            var lines = await File.ReadAllLinesAsync(csvFile);
-
-            results.Add(new AddressDocumentDomainModel
-            {
-                City = city,
-                State = state,
-                Country = country,
-                Size = lines.Length - 1
-            });
-        }
-
-        return results;
+        var csvFiles = Directory.EnumerateFiles("output", "*.csv", SearchOption.AllDirectories);
+        return await Task.WhenAll(csvFiles.Select(ReadDocumentAsync));
     }
 
     private static string GetFileName(LocationDomainModel location) =>
         $"output/{location.Country}/{location.State}/{location.City}.csv";
+
+    private static async Task<AddressDocumentDomainModel> ReadDocumentAsync(string csvFile)
+    {
+        var dirParts = Path.GetDirectoryName(csvFile)!.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        var country = dirParts[^2];
+        var state = dirParts[^1];
+        var city = Path.GetFileNameWithoutExtension(csvFile);
+        var lines = await File.ReadAllLinesAsync(csvFile);
+
+        return new AddressDocumentDomainModel
+        {
+            City = city,
+            State = state,
+            Country = country,
+            Size = lines.Length - 1
+        };
+    }
 
     private static async Task WriteAsync(string fileName, IEnumerable writeModel)
     {
