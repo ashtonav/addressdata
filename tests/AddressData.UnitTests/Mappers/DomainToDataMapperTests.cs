@@ -48,7 +48,7 @@ public class DomainToDataMapperTests
     {
         IEnumerable<AddressesDomainModel>? domainModels = null;
         var result = DomainToDataMapper.Map(domainModels);
-        Assert.That(result, Is.Empty);
+        Assert.That(result.ToList(), Is.Empty);
     }
 
     [Test]
