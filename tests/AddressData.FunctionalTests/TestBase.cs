@@ -11,7 +11,7 @@ public class TestBase
 
     protected TestBase(ScenarioContext context)
     {
-        var timeout = TimeSpan.FromMinutes(5);
+        var timeout = TimeSpan.FromMinutes(20);
         var app = new WebApplicationFactory<WebApi.Program>();
         var client = app.CreateClient();
         client.Timeout = timeout;

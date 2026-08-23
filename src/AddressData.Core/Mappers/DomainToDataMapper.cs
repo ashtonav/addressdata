@@ -17,19 +17,9 @@ public static class DomainToDataMapper
                 Longitude = domainModel.Longitude
             };
 
-    public static IEnumerable<CsvAddressesWriteModel> Map(
-        IEnumerable<AddressesDomainModel?> domainModels)
-    {
-        var data = new List<CsvAddressesWriteModel>();
-
-        foreach (var item in domainModels)
-        {
-            if (item is not null)
-            {
-                data.Add(Map(item));
-            }
-        }
-
-        return data;
-    }
+    public static IEnumerable<CsvAddressesWriteModel?>? Map(
+        IEnumerable<AddressesDomainModel?>? domainModels)
+        => domainModels?
+            .Where(item => item is not null)
+            .Select(Map);
 }

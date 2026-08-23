@@ -63,15 +63,24 @@ public class OverpassTurboService
             return null;
         }
 
-        return DomainToDomainMapper.Map(city, stateCountry);
+        return new LocationDomainModel
+        {
+            AreaId = city.AreaId,
+            City = city.City,
+            State = stateCountry.State,
+            Country = stateCountry.Country
+        };
     }
 
-    private async Task<Stream> PostAndGetStream(string query)
-    {
-        var response = await httpClientFactory
+    private Task<HttpResponseMessage> PostAsync(string query) =>
+        httpClientFactory
             .CreateClient()
             .PostAsync(Constants.OverpassTurboUrl,
                 new FormUrlEncodedContent([new("data", query)]));
+
+    private async Task<Stream> PostAndGetStream(string query)
+    {
+        var response = await PostAsync(query);
         return await response.Content.ReadAsStreamAsync();
     }
 
@@ -86,7 +95,7 @@ public class OverpassTurboService
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "An error occured while fetching data from Overpass Turbo");
+            logger.LogError(ex, "An error occurred while fetching data from Overpass Turbo");
             return null;
         }
     }
@@ -103,18 +112,14 @@ public class OverpassTurboService
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "An error occured while fetching data from Overpass Turbo");
+            logger.LogError(ex, "An error occurred while fetching data from Overpass Turbo");
             return default;
         }
     }
 
-
     private async Task<StateCountryDomainModel?> GetStateAndCountry(LatitudeLongitudeDomainModel location)
     {
-        var httpResponse = await httpClientFactory
-            .CreateClient()
-            .PostAsync(Constants.OverpassTurboUrl,
-                new FormUrlEncodedContent([new("data", Constants.OverpassTurboAreaInfoQuery(location.Latitude, location.Longitude))]));
+        var httpResponse = await PostAsync(Constants.OverpassTurboAreaInfoQuery(location.Latitude, location.Longitude));
 
         var json = await httpResponse.Content.ReadAsStringAsync();
         var response = JsonSerializer.Deserialize<OverpassTurboAreaInfoResponse>(json);

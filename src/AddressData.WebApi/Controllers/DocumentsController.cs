@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 public class DocumentsController(ISeedingService seedingService,
     IDocumentService documentService,
     IOverpassTurboService overpassTurboService)
-    : Controller
+    : ControllerBase
 {
     [HttpPost("seed")]
     [ProducesResponseType<AddressDocumentsApiResponse>(StatusCodes.Status200OK)]
@@ -24,7 +24,6 @@ public class DocumentsController(ISeedingService seedingService,
 
     [HttpPost("{areaId}")]
     [ProducesResponseType<AddressDocumentApiResponse>(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<AddressDocumentApiResponse>> InsertDocument(long areaId)
     {
@@ -32,9 +31,7 @@ public class DocumentsController(ISeedingService seedingService,
 
         var response = DomainToApiResponseMapper.Map(cityCreated);
 
-        return response is null
-            ? Conflict($"Something went wrong when trying to create a city {areaId}")
-            : Created($"documents/{areaId}", response);
+        return Created($"documents/{areaId}", response);
     }
 
     [HttpGet("{areaId}")]

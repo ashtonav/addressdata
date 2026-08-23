@@ -21,23 +21,14 @@ public static class OverpassTurboResponseToDomainMapper
 
     public static CityInfoDomainModel? Map(OverpassTurboCityInfoResponse? response)
     {
-        string city = null;
-
         if (response is null)
         {
             return null;
         }
 
-        if (!string.IsNullOrWhiteSpace(response.CityEnglish))
-        {
-            city = response.CityEnglish;
-        }
-        else if (!string.IsNullOrWhiteSpace(response.City))
-        {
-            city = response.City;
-        }
+        var city = !string.IsNullOrWhiteSpace(response.CityEnglish) ? response.CityEnglish : response.City;
 
-        if (response.AreaId == null || response.AreaId < 0 || response.AreaId == 0
+        if (response.AreaId is null or <= 0
             || string.IsNullOrWhiteSpace(city))
         {
             return null;
@@ -68,50 +59,25 @@ public static class OverpassTurboResponseToDomainMapper
         };
     }
 
-    public static IEnumerable<AddressesDomainModel>? Map(IEnumerable<OverpassTurboAddressesResponse?>? addresses)
+    public static IEnumerable<AddressesDomainModel>? Map(IEnumerable<OverpassTurboAddressesResponse?>? addresses) =>
+        MapCollection(addresses, Map);
+
+    public static IEnumerable<CityInfoDomainModel>? Map(IList<OverpassTurboCityInfoResponse>? cityInfos) =>
+        MapCollection(cityInfos, Map);
+
+    private static List<TOut>? MapCollection<TIn, TOut>(IEnumerable<TIn?>? source, Func<TIn?, TOut?> map)
+        where TOut : class
     {
-        if (addresses is null)
+        if (source is null)
         {
             return null;
         }
 
-        var response = new List<AddressesDomainModel>();
+        var mapped = source
+            .Select(map)
+            .Where(item => item is not null)
+            .ToList();
 
-        foreach (var address in addresses)
-        {
-            var mapped = Map(address);
-            if (mapped != null)
-            {
-                response.Add(mapped);
-            }
-        }
-
-        if (response.Count != 0)
-        {
-            return response;
-        }
-
-        return null;
-    }
-
-    public static IEnumerable<CityInfoDomainModel>? Map(IList<OverpassTurboCityInfoResponse>? cityInfos)
-    {
-        var response = new List<CityInfoDomainModel>();
-
-        foreach (var cityInfo in cityInfos)
-        {
-            var mapped = Map(cityInfo);
-            if (mapped != null)
-            {
-                response.Add(mapped);
-            }
-        }
-
-        if (response.Count != 0)
-        {
-            return response;
-        }
-
-        return null;
+        return mapped.Count != 0 ? mapped : null;
     }
 }

@@ -10,9 +10,8 @@ public class DocumentService : IDocumentService
 {
     public async Task<AddressDocumentDomainModel> InsertAsync(IEnumerable writeModel, LocationDomainModel location)
     {
-        var path = $"output/{location.Country}/{location.State}";
-        Directory.CreateDirectory(path);
-        var fileName = $"{path}/{location.City}.csv";
+        var fileName = GetFileName(location);
+        Directory.CreateDirectory(Path.GetDirectoryName(fileName)!);
 
         await WriteAsync(fileName, writeModel);
 
@@ -24,8 +23,7 @@ public class DocumentService : IDocumentService
 
     public async Task<AddressDocumentDomainModel?> GetAsync(LocationDomainModel location)
     {
-        var path = $"output/{location.Country}/{location.State}";
-        var fileName = $"{path}/{location.City}.csv";
+        var fileName = GetFileName(location);
 
         if (!File.Exists(fileName))
         {
@@ -72,6 +70,9 @@ public class DocumentService : IDocumentService
 
         return results;
     }
+
+    private static string GetFileName(LocationDomainModel location) =>
+        $"output/{location.Country}/{location.State}/{location.City}.csv";
 
     private static async Task WriteAsync(string fileName, IEnumerable writeModel)
     {

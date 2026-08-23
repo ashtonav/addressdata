@@ -44,10 +44,11 @@ public class DomainToDataMapperTests
     }
 
     [Test]
-    public void MapEnumerableOfAddressesDomainModelThrowsNullReferenceExceptionWhenNull()
+    public void MapEnumerableOfAddressesDomainModelReturnsNullWhenNull()
     {
-        IEnumerable<AddressesDomainModel> domainModels = null!;
-        Assert.Throws<NullReferenceException>(() => DomainToDataMapper.Map(domainModels));
+        IEnumerable<AddressesDomainModel>? domainModels = null;
+        var result = DomainToDataMapper.Map(domainModels);
+        Assert.That(result, Is.Null);
     }
 
     [Test]
