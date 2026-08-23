@@ -62,7 +62,7 @@ public static class OverpassTurboResponseToDomainMapper
     public static IEnumerable<AddressesDomainModel>? Map(IEnumerable<OverpassTurboAddressesResponse?>? addresses) =>
         MapCollection(addresses, Map);
 
-    public static IEnumerable<CityInfoDomainModel>? Map(IList<OverpassTurboCityInfoResponse>? cityInfos) =>
+    public static IEnumerable<CityInfoDomainModel>? Map(IEnumerable<OverpassTurboCityInfoResponse>? cityInfos) =>
         MapCollection(cityInfos, Map);
 
     private static List<TOut>? MapCollection<TIn, TOut>(IEnumerable<TIn?>? source, Func<TIn?, TOut?> map)

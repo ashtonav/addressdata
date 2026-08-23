@@ -7,6 +7,7 @@ internal static class TestConstants
     // --------------------
     public static string InsertDocumentEndpoint(string areaId) => $"documents/{areaId}";
     public static string SeedDocumentsEndpointWithLimit(string limit) => $"documents/seed?limit={limit}";
+    public const string DocumentsEndpoint = "documents";
 
     // --------------------
     // ScenarioContext Keys
@@ -19,6 +20,8 @@ internal static class TestConstants
     // JSON Fields
     // --------------------
     public const string CityField = "city";
+    public const string CountryField = "country";
     public const string AreaIdField = "areaId";
+    public const string SizeField = "size";
     public const string DocumentsField = "documents";
 }

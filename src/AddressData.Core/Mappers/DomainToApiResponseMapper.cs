@@ -36,5 +36,4 @@ public static class DomainToApiResponseMapper
                 .Where(mapped => mapped is not null)
         };
     }
-
 }

@@ -140,4 +140,49 @@ public class DocumentsSteps(ScenarioContext context) : TestBase(context)
             "AreaId in GET does not match the inserted city."
         );
     }
+
+    [When(@"I call the GetDocument endpoint of the DocumentsController")]
+    public void WhenICallTheGetDocumentEndpointOfTheDocumentsController()
+    {
+        var endpoint = TestConstants.InsertDocumentEndpoint(_areaId);
+        var request = new RestRequest(endpoint);
+
+        _response = Client.Execute(request);
+    }
+
+    [When(@"I call the GetAllDocuments endpoint")]
+    public void WhenICallTheGetAllDocumentsEndpoint()
+    {
+        var request = new RestRequest(TestConstants.DocumentsEndpoint);
+
+        _response = Client.Execute(request);
+    }
+
+    [Then(@"I expect the list of documents to include the newly created city")]
+    public void ThenIExpectTheListOfDocumentsToIncludeTheNewlyCreatedCity()
+    {
+        var insertResponse = Context[TestConstants.InsertResponse] as RestResponse;
+        var insertJson = JToken.Parse(insertResponse.Content);
+        var insertedCity = insertJson[TestConstants.CityField]?.ToString();
+        var insertedCountry = insertJson[TestConstants.CountryField]?.ToString();
+
+        var documents = JToken.Parse(_response.Content)[TestConstants.DocumentsField] as JArray;
+        Assert.That(documents, Is.Not.Null, "Expected a 'documents' array in the response.");
+
+        var matchingDocument = documents!.FirstOrDefault(document =>
+            document[TestConstants.CityField]?.ToString() == insertedCity &&
+            document[TestConstants.CountryField]?.ToString() == insertedCountry);
+
+        Assert.That(
+            matchingDocument,
+            Is.Not.Null,
+            $"Expected the documents list to contain '{insertedCity}, {insertedCountry}', but it was not found."
+        );
+
+        Assert.That(
+            matchingDocument![TestConstants.SizeField]?.ToObject<long>(),
+            Is.GreaterThan(0),
+            "Expected the matched document to report a positive size."
+        );
+    }
 }
